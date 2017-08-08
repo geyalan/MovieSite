@@ -2,7 +2,9 @@
 import web
 urls = (
 	'/','index',
-	'/movie/(\d+)','movie',
+	# '/movie/(\d+)','movie',
+	'/movie/(.*)','movie',
+	'/cast/(.*)','cast'
 )
 
 # dict实例
@@ -44,11 +46,18 @@ class movie:
 		movie = db.select('movie', where='id=$movie_id', vars=locals())[0]
 		return render.movie(movie)
 
-# class movie:
-#     def GET(self, movie_id):
-#         movie = db.select('movie', where='id=$int(movie_id)', vars=locals())[0]
-#         return render.movie(movie)
+# class cast:
+# 	def GET(self,cast_name):
+# 		condition = r'CASTS LIKE "%' + cast_name + r'%"'
+# 		movies = db.select('movie',where=condition)
+# 		count = db.query('SELECT COUNT(*) AS COUNT FROM movie WHERE' + condition)[0]['COUNT']
+# 		return render.index(movies,count,cast_name)
 
+class cast:
+	def GET(self,cast_name):
+		condition = r'casts like "%' + cast_name + r'%"'
+		movies = db.select('movie',where=condition)
+		return render.index(movies)
 
 if __name__ == "__main__":
 	app = web.application(urls,globals())
